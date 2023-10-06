@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Js Likes App</title>
+	<link rel="stylesheet" href="mdb/css/bootstrap.css">
+    <link rel="stylesheet" href="mdb/css/mdb.css">
+    <link rel="stylesheet" href="../assignment/fontawesome-free-6.4.2-web/css/all.css">
+</head>
+<body>
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-md-6 m-auto">
+				<div class="card">
+					<div class="card-header bg-primary text-white text-center">
+						<h1>Js Task List App</h1>
+					</div>
+					<div class="card-body bg-light">
+						<form id="task-form">
+							<div class="form-group">
+								<input type="text" id="task-input" class="form-control" placeholder="Enter Task Here">
+							</div>
+							<div class="form-group">
+								<input type="submit" class="btn btn-primary btn-md">
+							</div>
+						</form>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container mt-4">
+		<div class="row">
+			<div class="col-md-6 m-auto">
+				<ul class="list-group" id="task-list">	
+					
+				</ul>
+			</div>
+		</div>
+	</div>
+
+<script>
+let taskFormEl=document.getElementById('task-form');
+taskFormEl.addEventListener('submit',function(event)
+{
+	event.preventDefault();
+	let inputEl=document.getElementById('task-input');
+	let task=inputEl.value;
+	let taskList=localStorage.getItem('tasks')?JSON.parse(localStorage.getItem('tasks')):[];
+	taskList.unshift(task);
+	localStorage.setItem('tasks',JSON.stringify(taskList));
+	displayTasks();
+});
+
+
+//Display Tasks
+
+function displayTasks()
+{
+	let taskListEl=document.getElementById('task-list');
+
+	let taskList=localStorage.getItem('tasks')?JSON.parse(localStorage.getItem('tasks')):[];
+	let eachTask=``;
+	for(let task of taskList)
+	{
+		eachTask+=`<li class="list-group-item 	list-group-item-primary mb-2">
+						<span class="font-weight-bold">${task}</span>
+						<button class="close">
+							<i class="fa fa-times-circle"></i>
+						</button>
+					</li>`
+	}
+	taskListEl.innerHTML=eachTask;
+}
+displayTasks();
+
+
+//delete functionality
+
+let taskListEl=document.getElementById('task-list');
+
+taskListEl.addEventListener('click',function(event)
+{
+	let targetEl=event.target;
+	
+	if(targetEl.classList.contains('fa-times-circle'))
+	{
+		let actualEl=targetEl.parentElement.parentElement;
+		let selectedText=actualEl.innerText;
+	
+		let taskList=localStorage.getItem('tasks')?JSON.parse(localStorage.getItem('tasks')):[];
+
+		taskList=taskList.filter((task)=>
+		{
+			return task.trim()!==selectedText.trim();
+
+		})
+
+		localStorage.setItem('tasks',JSON.stringify(taskList));
+		displayTasks();
+	}
+
+})
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
